@@ -130,4 +130,4 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
         new LoginRegistrationSystem();
 
     }
-}
+}// I am alok;
