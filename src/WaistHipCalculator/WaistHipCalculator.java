@@ -91,31 +91,29 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
         new WaistHipCalculator(username);
     }
 
-    public static String getWHR(String username) {
-        String result = "";
+    public static String getWHR() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM waisthip WHERE username='" + username + "'");
-            statement.setString(1, username);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                double dbWaist = resultSet.getDouble("waist");
-                double dbHip = resultSet.getDouble("hip");
-                double ratio = dbWaist / dbHip;
-                result += String.format("Date: %s, Waist: %.2f, Hip: %.2f, WHR: %.2f\n", resultSet.getString("date"), dbWaist, dbHip, ratio);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM waisthip WHERE username='" + username + "'");
+    
+            if (resultSet.next()) {
+                double waist = resultSet.getDouble("waist");
+                double hip = resultSet.getDouble("hip");
+                double ratio = waist / hip; // calculate waisthip using cm and kg
+                return String.format("Waist: %.2f cm\nHip: %.2f kg\nWaist-to-Hip Ratio: %.2f", waist, hip, ratio);
+            } else {
+                return "No Waist-to-Hip data available for this user.";
             }
-            connection.close();
-        } catch (ClassNotFoundException ex) {
-            result = "Error: " + ex.getMessage();
-        } catch (SQLException ex) {
-            result = "Error: " + ex.getMessage();
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return "Error retrieving Waist-to-Hip data.";
         }
-        return result;
     }
 
-    public static String getWHR() {
-        return null;
-    }
+    
+
+    
     
 }
