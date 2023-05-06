@@ -64,6 +64,7 @@ public class BMICalculator extends JFrame implements ActionListener {
             double height = Double.parseDouble(heightField.getText()); // In cm
             double weight = Double.parseDouble(weightField.getText()); // In kg 
 
+            //System.out.println(username);
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO bmi (height, weight, username) VALUES (?, ?, ?)"); 

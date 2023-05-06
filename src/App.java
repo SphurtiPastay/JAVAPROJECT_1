@@ -19,7 +19,7 @@ import CorpulenceIndexCalculator.CorpulenceIndexCalculator;
 public class App extends JFrame implements ActionListener {
     private JFrame frame;
 
-    public App() {
+    public App(String username) {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Fitness Calculator");
@@ -49,12 +49,13 @@ public class App extends JFrame implements ActionListener {
         btnBmi.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new BMICalculator(getName());                   
+                    System.out.println(username);
+                    new BMICalculator(username);                   
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-        });
+        }); 
         btnBmi.setBackground(Color.BLUE);
         btnBmi.setForeground(Color.WHITE);
         btnBmi.setFocusPainted(false);
