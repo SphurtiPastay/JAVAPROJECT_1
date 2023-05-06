@@ -8,9 +8,12 @@ import javax.swing.*;
 public class BodySurfaceAreaCalculator extends JFrame implements ActionListener {
     private JTextField heightField, weightField, bsaField;
     private JButton calculateButton;
+    public static String username;
 
-    public BodySurfaceAreaCalculator() {
+    public BodySurfaceAreaCalculator( String username) {
         super("Body Surface Area Calculator");
+
+        BodySurfaceAreaCalculator.username = username;
 
         // set up labels and text fields
         JLabel heightLabel = new JLabel("Height (in cm):");
@@ -65,9 +68,18 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT INTO bsa (height, weight) VALUES (" + height + ", " + weight + ")");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM bsa");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO bsa (height, weight, username) VALUES (?, ?, ?)"); 
+
+            statement.setDouble(1, height);
+            statement.setDouble(2, weight);
+            statement.setString(3, username); // use the stored username
+
+            statement.executeUpdate();
+
+            // Statement statement = connection.createStatement();
+            // statement.execute("INSERT INTO bsa (height, weight) VALUES (" + height + ", " + weight + ")");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM bsa WHERE username='" + username + "'");
+
             while (resultSet.next()) {
                 double dbHeight = resultSet.getDouble("height");
                 double dbWeight = resultSet.getDouble("weight");
@@ -89,6 +101,6 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
     }
 
     public static void main(String[] args) {
-        new BodySurfaceAreaCalculator();
+        new BodySurfaceAreaCalculator(username);
     }
 }

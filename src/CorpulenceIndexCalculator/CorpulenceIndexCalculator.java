@@ -8,9 +8,12 @@ import javax.swing.*;
 public class CorpulenceIndexCalculator extends JFrame implements ActionListener {
     private JTextField weightField, heightField, corpulenceIndexField;
     private JButton calculateButton;
+    public static String username;
 
-    public CorpulenceIndexCalculator() {
+    public CorpulenceIndexCalculator(String username) {
         super("Corpulence Index Calculator");
+
+        CorpulenceIndexCalculator.username = username;
 
         // Set background color
         getContentPane().setBackground(new Color(120, 220, 220));
@@ -59,9 +62,17 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT INTO ci(weight, height) VALUES (" + weight + ", " + height + ")");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM ci");
+            //Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO ci (weight, height, username) VALUES (?, ?, ?)"); 
+            //statement.execute("INSERT INTO ci(weight, height) VALUES (" + weight + ", " + height + ")");
+
+            statement.setDouble(1, weight);
+            statement.setDouble(2, height);
+            statement.setString(3, username); // use the stored username
+
+            statement.executeUpdate();
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ci WHERE username='" + username + "'");
             while (resultSet.next()) {
                 double dbWeight = resultSet.getDouble("weight");
                 double dbHeight = resultSet.getDouble("height");
@@ -79,6 +90,6 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
     }
 
     public static void main(String[] args) {
-        new CorpulenceIndexCalculator();
+        new CorpulenceIndexCalculator(username);
     }
 }

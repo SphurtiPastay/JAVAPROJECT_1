@@ -49,7 +49,7 @@ public class App extends JFrame implements ActionListener {
         btnBmi.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    System.out.println(username);
+                    //System.out.println(username);
                     new BMICalculator(username);                   
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -65,7 +65,7 @@ public class App extends JFrame implements ActionListener {
         btnWHR.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new WaistHipCalculator();
+                    new WaistHipCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -80,7 +80,7 @@ public class App extends JFrame implements ActionListener {
         btnRFM.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                   new RelativeFatMassCalculator();
+                   new RelativeFatMassCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -95,7 +95,7 @@ public class App extends JFrame implements ActionListener {
         btnBSA.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new BodySurfaceAreaCalculator();
+                    new BodySurfaceAreaCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -110,7 +110,7 @@ public class App extends JFrame implements ActionListener {
         btnCI.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new CorpulenceIndexCalculator();
+                    new CorpulenceIndexCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

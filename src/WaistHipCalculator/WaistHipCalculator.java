@@ -7,9 +7,14 @@ import javax.swing.*;
 public class WaistHipCalculator extends JFrame implements ActionListener {
     private JTextField waistField, hipField, ratioField;
     private JButton calculateButton;
+    public static String username;
 
-    public WaistHipCalculator() {
+    public WaistHipCalculator(String username) {
         super("Waist-to-Hip Ratio Calculator");
+
+        WaistHipCalculator.username=username;
+
+
 
         JLabel waistLabel = new JLabel("Waist (in cm):");
         waistField = new JTextField(5);
@@ -56,9 +61,16 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT INTO waisthip (waist, hip) VALUES (" + waist + ", " + hip + ")");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM waisthip");
+            // Statement statement = connection.createStatement();
+            // statement.execute("INSERT INTO waisthip (waist, hip) VALUES (" + waist + ", " + hip + ")");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO waisthip (waist, hip, username) VALUES (?, ?, ?)"); 
+
+            statement.setDouble(1, waist);
+            statement.setDouble(2, hip);
+            statement.setString(3, username); // use the stored username
+
+            statement.executeUpdate();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM waisthip WHERE username='" + username + "'");
             while (resultSet.next()) {
                 double dbWaist = resultSet.getDouble("waist");
                 double dbHip = resultSet.getDouble("hip");
@@ -76,6 +88,6 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new WaistHipCalculator();
+        new WaistHipCalculator(username);
     }
 }

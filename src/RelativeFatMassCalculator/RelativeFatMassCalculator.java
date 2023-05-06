@@ -8,9 +8,14 @@ import javax.swing.*;
 public class RelativeFatMassCalculator extends JFrame implements ActionListener {
     private JTextField heightField, waistField, sexField, rfMField;
     private JButton calculateButton;
+    public static String username;
 
-    public RelativeFatMassCalculator() {
+    public RelativeFatMassCalculator(String username) {
         super("Relative Fat Mass Calculator");
+
+        RelativeFatMassCalculator.username=username;
+
+
         
         // Set background color
         getContentPane().setBackground(new Color(220, 220, 220));
@@ -77,9 +82,18 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
     
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT INTO rfm (height, waist, sex) VALUES (" + height + ", " + waist + ", '" + sex + "')");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM rfm");
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO rfm (height, waist, sex, username) VALUES (?, ?, ?, ?)"); 
+
+            statement.setDouble(1, height);
+            statement.setDouble(2, waist);
+            statement.setString(3, sex);
+            statement.setString(4, username); // use the stored username
+
+            statement.executeUpdate();
+            // Statement statement = connection.createStatement();
+            // statement.execute("INSERT INTO rfm (height, waist, sex) VALUES (" + height + ", " + waist + ", '" + sex + "')");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM rfm WHERE username='" + username + "'");
             while (resultSet.next()) {
                 double dbHeight = resultSet.getDouble("height");
                 double dbWaist = resultSet.getDouble("waist");
@@ -106,6 +120,6 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
     }
     
     public static void main(String[] args) {
-        new RelativeFatMassCalculator();
+        new RelativeFatMassCalculator(username);
     }
 }
