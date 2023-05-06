@@ -15,8 +15,6 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
 
         RelativeFatMassCalculator.username=username;
 
-
-        
         // Set background color
         getContentPane().setBackground(new Color(220, 220, 220));
 
@@ -91,8 +89,6 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
             statement.setString(4, username); // use the stored username
 
             statement.executeUpdate();
-            // Statement statement = connection.createStatement();
-            // statement.execute("INSERT INTO rfm (height, waist, sex) VALUES (" + height + ", " + waist + ", '" + sex + "')");
             ResultSet resultSet = statement.executeQuery("SELECT * FROM rfm WHERE username='" + username + "'");
             while (resultSet.next()) {
                 double dbHeight = resultSet.getDouble("height");

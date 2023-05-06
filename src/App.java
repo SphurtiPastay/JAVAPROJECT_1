@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import BMICalculator.BMICalculator; 
 import WaistHipCalculator.WaistHipCalculator;
 import RelativeFatMassCalculator.RelativeFatMassCalculator;
@@ -139,8 +140,6 @@ public class App extends JFrame implements ActionListener {
         btnReport.setForeground(Color.WHITE);
         btnReport.setFocusPainted(false);
         btnReport.setFont(btnFont);
-
-    
 
 
         JPanel panel = new JPanel();

@@ -82,7 +82,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     App obj = new App(username);
                     obj.setVisible(true);
-                    // dispose();
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid username or password!");
                 }

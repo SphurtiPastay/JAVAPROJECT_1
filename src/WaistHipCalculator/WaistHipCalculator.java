@@ -1,4 +1,5 @@
 package WaistHipCalculator;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -13,8 +14,6 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
         super("Waist-to-Hip Ratio Calculator");
 
         WaistHipCalculator.username=username;
-
-
 
         JLabel waistLabel = new JLabel("Waist (in cm):");
         waistField = new JTextField(5);
@@ -61,8 +60,6 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            // Statement statement = connection.createStatement();
-            // statement.execute("INSERT INTO waisthip (waist, hip) VALUES (" + waist + ", " + hip + ")");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO waisthip (waist, hip, username) VALUES (?, ?, ?)"); 
 
             statement.setDouble(1, waist);
@@ -111,9 +108,4 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             return "Error retrieving Waist-to-Hip data.";
         }
     }
-
-    
-
-    
-    
 }

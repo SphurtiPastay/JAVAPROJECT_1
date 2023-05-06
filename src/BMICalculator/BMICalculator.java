@@ -100,12 +100,10 @@ public class BMICalculator extends JFrame implements ActionListener {
     }
     
 
-
     public static void main(String[] args) {
         new BMICalculator(username);
     }
 
-    
     public static String getBMI() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

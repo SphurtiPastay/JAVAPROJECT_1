@@ -86,5 +86,4 @@ public class FitnessReportGUI extends JFrame implements ActionListener {
         new FitnessReportGUI(username);
        
     }
-
 }

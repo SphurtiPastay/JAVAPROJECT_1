@@ -62,9 +62,6 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            // Statement statement = connection.createStatement();
-            // statement.execute("INSERT INTO ci(weight, height) VALUES (" + weight + ", " + height + ")");
-
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ci (weight, height, username) VALUES (?, ?, ?)"); 
 
             statement.setDouble(1, weight);
@@ -99,7 +96,6 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             Statement statement = connection.createStatement();
-            // String username;
             ResultSet resultSet = statement.executeQuery("SELECT * FROM ci WHERE username='" + username + "'");
     
             if (resultSet.next()) {

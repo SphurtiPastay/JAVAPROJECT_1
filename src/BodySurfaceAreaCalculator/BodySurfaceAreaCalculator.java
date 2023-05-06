@@ -16,8 +16,6 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
 
         BodySurfaceAreaCalculator.username = username;
 
-        BodySurfaceAreaCalculator.username = username;
-
         // set up labels and text fields
         JLabel heightLabel = new JLabel("Height (in cm):");
         heightField = new JTextField(5);
@@ -74,8 +72,6 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            // Statement statement = connection.createStatement();
-            // statement.execute("INSERT INTO bsa (height, weight) VALUES (" + height + ", " + weight + ")"); 
             PreparedStatement statement = connection.prepareStatement("INSERT INTO bsa (height, weight, username) VALUES (?, ?, ?)"); 
 
             statement.setDouble(1, height);
