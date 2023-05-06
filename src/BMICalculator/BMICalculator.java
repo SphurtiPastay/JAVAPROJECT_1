@@ -64,6 +64,7 @@ public class BMICalculator extends JFrame implements ActionListener {
             double height = Double.parseDouble(heightField.getText()); // In cm
             double weight = Double.parseDouble(weightField.getText()); // In kg 
 
+            //System.out.println(username);
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO bmi (height, weight, username) VALUES (?, ?, ?)"); 
@@ -81,6 +82,7 @@ public class BMICalculator extends JFrame implements ActionListener {
                 double dbWeight = resultSet.getDouble("weight"); // In kg
                 
                 double bmi = dbWeight / (dbHeight * dbHeight); // use cm and kg
+                
                 bmiField.setText(String.format("%.2f", bmi));
             }
             connection.close();
@@ -98,4 +100,27 @@ public class BMICalculator extends JFrame implements ActionListener {
         new BMICalculator(username);
     }
 
-}
+    
+        public static String getBMI() {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM bmi WHERE username='" + username + "'");
+        
+                if (resultSet.next()) {
+                    double height = resultSet.getDouble("height");
+                    double weight = resultSet.getDouble("weight");
+                    double bmi = weight / (height * height); // calculate BMI using cm and kg
+                    return String.format("Height: %.2f cm\nWeight: %.2f kg\nBMI: %.2f", height, weight, bmi);
+                } else {
+                    return "No BMI data available for this user.";
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                ex.printStackTrace();
+                return "Error retrieving BMI data.";
+            }
+        }
+        
+    }
+

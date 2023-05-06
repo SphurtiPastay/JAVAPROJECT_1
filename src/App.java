@@ -15,6 +15,7 @@ import WaistHipCalculator.WaistHipCalculator;
 import RelativeFatMassCalculator.RelativeFatMassCalculator;
 import BodySurfaceAreaCalculator.BodySurfaceAreaCalculator;
 import CorpulenceIndexCalculator.CorpulenceIndexCalculator;
+import FitnessReportGUI.FitnessReportGUI;
 
 public class App extends JFrame implements ActionListener {
     private JFrame frame;
@@ -65,7 +66,7 @@ public class App extends JFrame implements ActionListener {
         btnWHR.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new WaistHipCalculator();
+                    new WaistHipCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -80,7 +81,7 @@ public class App extends JFrame implements ActionListener {
         btnRFM.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                   new RelativeFatMassCalculator();
+                   new RelativeFatMassCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -95,7 +96,7 @@ public class App extends JFrame implements ActionListener {
         btnBSA.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new BodySurfaceAreaCalculator();
+                    new BodySurfaceAreaCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -110,7 +111,7 @@ public class App extends JFrame implements ActionListener {
         btnCI.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new CorpulenceIndexCalculator();
+                    new CorpulenceIndexCalculator(username);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -119,7 +120,28 @@ public class App extends JFrame implements ActionListener {
         btnCI.setBackground(Color.BLUE);
         btnCI.setForeground(Color.WHITE);
         btnCI.setFocusPainted(false);
-        btnCI.setFont(btnFont);
+        btnCI.setFont(btnFont); 
+
+        JButton btnReport = new JButton("Generate Report");
+        btnReport.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+          try{
+            new FitnessReportGUI(username);
+            
+          } catch(Exception ex){
+            ex.printStackTrace();
+
+          }
+        }
+    });
+
+        btnReport.setBackground(Color.BLUE);
+        btnReport.setForeground(Color.WHITE);
+        btnReport.setFocusPainted(false);
+        btnReport.setFont(btnFont);
+
+    
+
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2, 10, 10));
@@ -129,6 +151,7 @@ public class App extends JFrame implements ActionListener {
         panel.add(btnRFM);
         panel.add(btnBSA);
         panel.add(btnCI);
+        panel.add(btnReport);
         
         frame.add(panel, BorderLayout.CENTER);
         frame.setVisible(true);     

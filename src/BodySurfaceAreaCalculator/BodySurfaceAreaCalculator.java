@@ -8,9 +8,13 @@ import javax.swing.*;
 public class BodySurfaceAreaCalculator extends JFrame implements ActionListener {
     private JTextField heightField, weightField, bsaField;
     private JButton calculateButton;
+    private static String username; // added field to store username
 
-    public BodySurfaceAreaCalculator() {
-        super("Body Surface Area Calculator");
+
+    public BodySurfaceAreaCalculator(String username) {
+        super("BodySurfaceArea Calculator"); 
+
+        BodySurfaceAreaCalculator.username = username;
 
         // set up labels and text fields
         JLabel heightLabel = new JLabel("Height (in cm):");
@@ -58,6 +62,9 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
         setVisible(true);
     }
 
+    public BodySurfaceAreaCalculator() {
+    }
+
     public void actionPerformed(ActionEvent e) {
         try {
             double height = Double.parseDouble(heightField.getText());
@@ -65,9 +72,18 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            statement.execute("INSERT INTO bsa (height, weight) VALUES (" + height + ", " + weight + ")");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM bsa");
+            // Statement statement = connection.createStatement();
+            // statement.execute("INSERT INTO bsa (height, weight) VALUES (" + height + ", " + weight + ")"); 
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO bsa (height, weight, username) VALUES (?, ?, ?)"); 
+
+            statement.setDouble(1, height);
+            statement.setDouble(2, weight);
+            statement.setString(3, username); 
+
+            statement.executeUpdate();
+
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM bsa WHERE username='" + username + "'");
             while (resultSet.next()) {
                 double dbHeight = resultSet.getDouble("height");
                 double dbWeight = resultSet.getDouble("weight");
@@ -89,6 +105,28 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
     }
 
     public static void main(String[] args) {
-        new BodySurfaceAreaCalculator();
+        new BodySurfaceAreaCalculator(username);
     }
+
+    public static String getBSA() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM bsa WHERE username='" + username + "'");
+    
+            if (resultSet.next()) {
+                double height = resultSet.getDouble("height");
+                double weight = resultSet.getDouble("weight");
+                double bsa = Math.sqrt((height * weight) / 3600.0); // calculate BSA using cm and kg
+                return String.format("Height: %.2f cm\nWeight: %.2f kg\nBSA: %.2f m²", height, weight, bsa);
+            } else {
+                return "No BSA data available for this user.";
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return "Error retrieving BSA data.";
+        }
+    }
+    
 }
