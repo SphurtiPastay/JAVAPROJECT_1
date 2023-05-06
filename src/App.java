@@ -50,7 +50,7 @@ public class App extends JFrame implements ActionListener {
         btnBmi.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    System.out.println(username);
+                    //System.out.println(username);
                     new BMICalculator(username);                   
                 } catch (Exception ex) {
                     ex.printStackTrace();

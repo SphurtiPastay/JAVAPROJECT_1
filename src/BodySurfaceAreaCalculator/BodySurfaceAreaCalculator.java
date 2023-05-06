@@ -16,6 +16,8 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
 
         BodySurfaceAreaCalculator.username = username;
 
+        BodySurfaceAreaCalculator.username = username;
+
         // set up labels and text fields
         JLabel heightLabel = new JLabel("Height (in cm):");
         heightField = new JTextField(5);
