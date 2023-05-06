@@ -43,11 +43,6 @@ public class App extends JFrame implements ActionListener {
         logoPanel.add(logoLabel);
         frame.add(logoPanel, BorderLayout.WEST);
 
-        //  // Create the empty panel to add space between the title and buttons
-        //  JPanel titlePanel = new JPanel();
-        //  titlePanel.setPreferredSize(new Dimension(550, 50));
-        //  titlePanel.setBackground(Color.WHITE);
-
         Font btnFont = new Font("Arial", Font.BOLD, 18); 
 
         JButton btnBmi = new JButton("Calculate BMI");

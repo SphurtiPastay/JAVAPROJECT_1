@@ -23,7 +23,6 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
         calculateButton.addActionListener(this);
         calculateButton.setBackground(new Color(64, 128, 128));
         calculateButton.setForeground(Color.WHITE);
-        // calculateButton.setFont(new Font("Tahoma", Font.BOLD, 16));
         calculateButton.setFocusPainted(false);
 
         JPanel panel = new JPanel();

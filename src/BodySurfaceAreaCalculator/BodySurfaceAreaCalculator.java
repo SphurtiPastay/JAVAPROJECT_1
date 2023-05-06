@@ -42,7 +42,6 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
         getContentPane().add(calculateButton, BorderLayout.SOUTH);
 
         // set background color
-        //panel.setBackground(new Color(220, 220, 220));
         calculateButton.setBackground(new Color(64, 128, 128));
         calculateButton.setForeground(Color.WHITE);
         calculateButton.setFocusPainted(false);
