@@ -81,7 +81,7 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
             }
     
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
 
             PreparedStatement statement = connection.prepareStatement("INSERT INTO rfm (height, waist, sex, username) VALUES (?, ?, ?, ?)"); 
 
