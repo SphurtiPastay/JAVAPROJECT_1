@@ -56,7 +56,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             double hip = Double.parseDouble(hipField.getText());
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
             Statement statement = connection.createStatement();
             statement.execute("INSERT INTO waisthip (waist, hip) VALUES (" + waist + ", " + hip + ")");
             ResultSet resultSet = statement.executeQuery("SELECT * FROM waisthip");

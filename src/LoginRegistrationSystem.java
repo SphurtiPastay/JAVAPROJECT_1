@@ -70,7 +70,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
             try {
                 System.out.println("Trying to connect to database...");
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root",
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root",
                         "12345");
                 PreparedStatement preparedStatement = connection
                         .prepareStatement("SELECT * FROM users WHERE BINARY username=? AND BINARY password=?"); 
@@ -100,7 +100,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root",
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root",
                         "12345");
                 PreparedStatement preparedStatement = connection
                         .prepareStatement("SELECT * FROM users WHERE BINARY username=?");
@@ -130,4 +130,4 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
         new LoginRegistrationSystem();
 
     }
-}// I am alok;
+}

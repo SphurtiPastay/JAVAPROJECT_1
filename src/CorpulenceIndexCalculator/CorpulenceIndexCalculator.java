@@ -58,7 +58,7 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
             double height = Double.parseDouble(heightField.getText());
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
             Statement statement = connection.createStatement();
             statement.execute("INSERT INTO ci(weight, height) VALUES (" + weight + ", " + height + ")");
             ResultSet resultSet = statement.executeQuery("SELECT * FROM ci");
