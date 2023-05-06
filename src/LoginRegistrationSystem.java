@@ -80,7 +80,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     JOptionPane.showMessageDialog(this, "Login successful!");
-                    App obj = new App();
+                    App obj = new App(username);
                     obj.setVisible(true);
                     // dispose();
                 } else {
