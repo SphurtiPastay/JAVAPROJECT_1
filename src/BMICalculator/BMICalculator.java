@@ -99,10 +99,10 @@ public class BMICalculator extends JFrame implements ActionListener {
     
             ResultSet resultSet = statement.executeQuery();
     
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 double height = resultSet.getDouble("height");
                 double weight = resultSet.getDouble("weight");
-                double bmi_value = weight / (height * height); // calculate BMI using cm and kg
+                double bmi_value = resultSet.getDouble("bmi_value"); // get BMI value from database
                 return String.format("Height: %.2f cm\nWeight: %.2f kg\nBMI: %.2f", height, weight, bmi_value);
             }
     
@@ -112,6 +112,7 @@ public class BMICalculator extends JFrame implements ActionListener {
             return "Error retrieving BMI data.";
         }
     }
+    
 
 }
     
