@@ -8,6 +8,7 @@ import javax.swing.*;
 public class WaistHipCalculator extends JFrame implements ActionListener {
     private JTextField waistField, hipField, ratioField;
     private JButton calculateButton;
+    private JLabel resultLabel;
     public static String username;
 
     public WaistHipCalculator(String username) {
@@ -22,6 +23,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
         JLabel ratioLabel = new JLabel("Waist-to-Hip Ratio:");
         ratioField = new JTextField(5);
         ratioField.setEditable(false);
+        resultLabel = new JLabel();
 
         calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(this);
@@ -30,13 +32,15 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
         calculateButton.setFocusPainted(false);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2,10,10));
+        panel.setLayout(new GridLayout(4, 2,10,10));
         panel.add(waistLabel);
         panel.add(waistField);
         panel.add(hipLabel);
         panel.add(hipField);
         panel.add(ratioLabel);
         panel.add(ratioField);
+        panel.add(new JLabel()); // empty cell
+        panel.add(resultLabel);
         panel.setBackground(new Color(240, 240, 240));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -59,7 +63,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             double hip = Double.parseDouble(hipField.getText());
             
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO waisthip (waist, hip, username, waisthip_value) VALUES (?, ?, ?, ?)"); 
 
             double waisthip_value =  waist / hip;
@@ -74,6 +78,20 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             statement.executeUpdate(); 
 
             ratioField.setText(String.format("%.2f", waisthip_value));
+
+            if (waisthip_value < 0.9) {
+                resultLabel.setText("Low Risk");
+                resultLabel.setForeground(new Color(0, 128, 0));
+                //ratioField.setText(String.format("%.2f", waisthip_value) + " (Low risk)");
+            } else if (waisthip_value >= 0.9 && waisthip_value < 1.0) {
+                resultLabel.setText("Moderate Risk");
+                resultLabel.setForeground(new Color(0, 128, 0));
+                //ratioField.setText(String.format("%.2f", waisthip_value) + " (Moderate risk)");
+            } else {
+                resultLabel.setText("High Rsik");
+                resultLabel.setForeground(new Color(0, 128, 0));
+                //ratioField.setText(String.format("%.2f", waisthip_value) + " (High risk)");
+            }
 
             
             connection.close();
@@ -93,7 +111,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
     public static String getWHR() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
             // Statement statement = connection.createStatement();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM waisthip WHERE username=? ORDER BY datetime DESC");
     
@@ -103,7 +121,16 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             if (resultSet.next()) {
                 
                 double waisthip_value = resultSet.getDouble("waisthip_value"); // calculate waisthip using cm and kg
-                return String.format("%.2f", waisthip_value);
+
+                String waisthip_Overview;
+                if (waisthip_value < 0.9) {
+                    waisthip_Overview = "Low risk";
+                } else if (waisthip_value >= 0.9 && waisthip_value < 1.0) {
+                    waisthip_Overview = "Moderate risk";
+                } else {
+                    waisthip_Overview = "High risk";
+                }
+                return String.format("Waist-to-Hip Ratio: %.2f\nWHR Overview: %s", waisthip_value, waisthip_Overview);
             } else {
                 return "No Waist-to-Hip data available for this user.";
             }
