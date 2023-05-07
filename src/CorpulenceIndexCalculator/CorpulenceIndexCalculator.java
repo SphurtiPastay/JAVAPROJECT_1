@@ -57,26 +57,23 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
 
     public void actionPerformed(ActionEvent e) {
         try {
-            double weight = Double.parseDouble(weightField.getText());
             double height = Double.parseDouble(heightField.getText());
-
+            double weight = Double.parseDouble(weightField.getText());
+    
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO ci (weight, height, username) VALUES (?, ?, ?)"); 
-
-            statement.setDouble(1, weight);
-            statement.setDouble(2, height);
-            statement.setString(3, username); // use the stored username
-
-            statement.executeUpdate(); 
-            
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM ci WHERE username='" + username + "'");
-            while (resultSet.next()) {
-                double dbWeight = resultSet.getDouble("weight");
-                double dbHeight = resultSet.getDouble("height");
-                double corpulenceIndex = dbWeight / Math.pow(dbHeight / 100.0, 3);
-                corpulenceIndexField.setText(String.format("%.2f", corpulenceIndex));
-            }
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO ci (height, weight, username, ci_value) VALUES (?, ?, ?, ?)");
+    
+            double ci_value = weight / Math.pow(height / 100.0, 3);
+    
+            statement.setDouble(1, height);
+            statement.setDouble(2, weight);
+            statement.setString(3, username);
+            statement.setDouble(4, ci_value);
+    
+            statement.executeUpdate();
+    
+            corpulenceIndexField.setText(String.format("%.2f", ci_value));
             connection.close();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input!");
@@ -95,21 +92,27 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM ci WHERE username='" + username + "'");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM ci WHERE username=? ORDER BY datetime DESC");
+    
+            statement.setString(1, username);
+    
+            ResultSet resultSet = statement.executeQuery();
     
             if (resultSet.next()) {
-                double height = resultSet.getDouble("height");
-                double weight = resultSet.getDouble("weight");
-                double ci = weight / Math.pow(height / 100.0, 3); // calculate CI using cm and kg
-                return String.format("Height: %.2f cm\nWeight: %.2f kg\nCorpulence Index: %.2f", height, weight, ci);
-            } else {
-                return "No Corpulence Index data available for this user.";
+                
+                double ci_value = resultSet.getDouble("ci_value"); // get CI value from database
+                return String.format("%.2f",ci_value);
             }
+    
+            return "No CI data available for this user.";
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            return "Error retrieving Corpulence Index data.";
+            return "Error retrieving CI data.";
         }
     }
     
+
 }
+    
+
+
