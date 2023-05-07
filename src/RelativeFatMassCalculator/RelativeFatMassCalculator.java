@@ -73,45 +73,38 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
             double height = Double.parseDouble(heightField.getText());
             double waist = Double.parseDouble(waistField.getText());
             String sex = sexField.getText().toUpperCase();
-            
+            double rfm_value;
+    
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+    
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO rfm (height, waist, sex, username, rfm_value) VALUES (?, ?, ?, ?, ?)");
+    
             if (sex.length() != 1 || (sex.charAt(0) != 'M' && sex.charAt(0) != 'F')) {
                 throw new IllegalArgumentException("Invalid sex input. Please enter 'M' or 'F'.");
             }
     
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
-
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO rfm (height, waist, sex, username) VALUES (?, ?, ?, ?)"); 
-
+            if (sex.equalsIgnoreCase("M")) {
+                rfm_value = 64 - (20 * (height / waist));
+            } else if (sex.equalsIgnoreCase("F")) {
+                rfm_value = 76 - (20 * (height / waist));
+            } else {
+                throw new IllegalArgumentException("Invalid sex input. Please enter 'M' or 'F'.");
+            }
+    
+            // Set the RFM value in the text field
+            rfMField.setText(String.format("%.2f", rfm_value));
+    
+            // Set the values in the prepared statement and execute it
             statement.setDouble(1, height);
             statement.setDouble(2, waist);
             statement.setString(3, sex);
-            statement.setString(4, username); // use the stored username
-
+            statement.setString(4, username);
+            statement.setDouble(5, rfm_value);
             statement.executeUpdate();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM rfm WHERE username='" + username + "'");
-            while (resultSet.next()) {
-                double dbHeight = resultSet.getDouble("height");
-                double dbWaist = resultSet.getDouble("waist");
-                String dbSex = resultSet.getString("sex");
-                
-                if (dbSex.equalsIgnoreCase("M")) {
-                    double rfm = 64 - (20 * (dbHeight / dbWaist));
-                    rfMField.setText(String.format("%.2f", rfm));
-                } else if (dbSex.equalsIgnoreCase("F")) {
-                    double rfm = 76 - (20 * (dbHeight / dbWaist));
-                    rfMField.setText(String.format("%.2f", rfm));
-                }
-            }
-            connection.close();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid input!");
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+    
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -123,37 +116,24 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM rfm WHERE username=? ORDER BY datetime DESC");
     
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM rfm WHERE username=?"); 
-    
-            statement.setString(1, username); // use the stored username
+            statement.setString(1, username);
     
             ResultSet resultSet = statement.executeQuery();
+    
             if (resultSet.next()) {
-                double height = resultSet.getDouble("height");
-                double waist = resultSet.getDouble("waist");
-                String sex = resultSet.getString("sex");
-                
-                double rfm;
-                if (sex.equalsIgnoreCase("M")) {
-                    rfm = 64 - (20 * (height / waist));
-                } else if (sex.equalsIgnoreCase("F")) {
-                    rfm = 76 - (20 * (height / waist));
-                } else {
-                    throw new IllegalArgumentException("Invalid sex input. Please enter 'M' or 'F'.");
-                }
-                return String.format("%.2f", rfm);
-            } else {
-                throw new SQLException("No RFM value found for user " + username);
+  
+                double rfm_value = resultSet.getDouble("rfm_value"); // get RFM value from database
+                return String.format("%.2f",rfm_value);
             }
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error: " + ex.getMessage());
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getMessage());
+    
+            return "No RFM data available for this user.";
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return "Error retrieving RFM data.";
         }
-        return null;
     }
+    
     
 }
