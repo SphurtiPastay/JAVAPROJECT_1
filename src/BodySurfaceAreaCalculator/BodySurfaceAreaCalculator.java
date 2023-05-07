@@ -83,6 +83,7 @@ public class BodySurfaceAreaCalculator extends JFrame implements ActionListener 
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }
+    
 
     private double calculateBSA(double height, double weight) {
         return Math.sqrt((height * weight) / 3600.0);

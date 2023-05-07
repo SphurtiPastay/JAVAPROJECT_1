@@ -83,6 +83,7 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }
+    
 
     public static void main(String[] args) {
         new CorpulenceIndexCalculator(username);
