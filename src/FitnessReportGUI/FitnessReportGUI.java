@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import BMICalculator.BMICalculator;
 import BodySurfaceAreaCalculator.BodySurfaceAreaCalculator;
@@ -35,9 +36,16 @@ public class FitnessReportGUI extends JFrame implements ActionListener {
         // Add the components to the frame
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(new JScrollPane(reportArea), BorderLayout.CENTER);
+        contentPane.setBackground(new Color(240, 240, 240));
+        
+        JPanel reportPanel = new JPanel(new BorderLayout());
+        reportPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        reportPanel.setBackground(new Color(255, 255, 255));
+        reportPanel.add(new JScrollPane(reportArea), BorderLayout.CENTER);
+        contentPane.add(reportPanel, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240));
         buttonPanel.add(saveButton);
         buttonPanel.add(displayButton);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
