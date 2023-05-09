@@ -64,7 +64,7 @@ public class BMICalculator extends JFrame implements ActionListener {
             double weight = Double.parseDouble(weightField.getText());
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO bmi (height, weight, username, bmi_value) VALUES (?, ?, ?, ?)");
 
             double bmi_value = weight / ((height / 100) * (height / 100));
@@ -110,7 +110,7 @@ public class BMICalculator extends JFrame implements ActionListener {
     public static String getBMI() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM bmi WHERE username=? ORDER BY datetime DESC");
     
             statement.setString(1, username);

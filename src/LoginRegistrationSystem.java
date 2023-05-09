@@ -7,7 +7,9 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private JButton registerButton;
+    private JButton registerButton; 
+    private JButton adminButton;
+
 
     public LoginRegistrationSystem() {
         super("Login");
@@ -32,10 +34,13 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
 
         registerButton = new JButton("Register");
-        registerButton.addActionListener(this);
+        registerButton.addActionListener(this); 
+
+        adminButton = new JButton("Admin");
+        adminButton.addActionListener(this);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2, 10, 10));
+        panel.setLayout(new GridLayout(5, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.add(usernameLabel);
         panel.add(usernameField);
@@ -45,6 +50,8 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
         panel.add(loginButton);
         panel.add(new JLabel(""));
         panel.add(registerButton);
+        panel.add(new JLabel(""));
+        panel.add(adminButton);
 
         // Set colors and fonts
         panel.setBackground(Color.WHITE);
@@ -54,6 +61,8 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
         loginButton.setForeground(Color.WHITE);
         registerButton.setBackground(new Color(70, 130, 180));
         registerButton.setForeground(Color.WHITE);
+        adminButton.setBackground(new Color(128, 128, 128));
+        adminButton.setForeground(Color.WHITE);
 
         // Add elements to the frame
         getContentPane().add(title, BorderLayout.NORTH);
@@ -70,7 +79,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
             try {
                 System.out.println("Trying to connect to database...");
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root",
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root",
                         "12345");
                 PreparedStatement preparedStatement = connection
                         .prepareStatement("SELECT * FROM users WHERE BINARY username=? AND BINARY password=?"); 
@@ -94,13 +103,23 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
-        } else if (e.getSource() == registerButton) {
+
+    
+        }  else if (e.getSource() == adminButton) {
+            // Add your admin button logic here
+            JOptionPane.showMessageDialog(this, "You clicked the Admin button!");
+        }
+         
+        
+        
+        
+        else if (e.getSource() == registerButton) {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root",
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root",
                         "12345");
                 PreparedStatement preparedStatement = connection
                         .prepareStatement("SELECT * FROM users WHERE BINARY username=?");

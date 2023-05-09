@@ -65,7 +65,7 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
             double height = Double.parseDouble(heightField.getText());
     
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO ci (weight, height, username, ci_value) VALUES (?, ?, ?, ?)"); 
     
             double ci_value = weight / Math.pow(height / 100.0, 3);
@@ -110,7 +110,7 @@ public class CorpulenceIndexCalculator extends JFrame implements ActionListener 
     public static String getCI() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM ci WHERE username=? ORDER BY datetime DESC");
 
             statement.setString(1, username);

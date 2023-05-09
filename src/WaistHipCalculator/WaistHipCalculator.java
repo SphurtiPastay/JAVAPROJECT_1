@@ -63,7 +63,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
             double hip = Double.parseDouble(hipField.getText());
             
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("INSERT INTO waisthip (waist, hip, username, waisthip_value) VALUES (?, ?, ?, ?)"); 
 
             double waisthip_value =  waist / hip;
@@ -111,7 +111,7 @@ public class WaistHipCalculator extends JFrame implements ActionListener {
     public static String getWHR() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             // Statement statement = connection.createStatement();
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM waisthip WHERE username=? ORDER BY datetime DESC");
     

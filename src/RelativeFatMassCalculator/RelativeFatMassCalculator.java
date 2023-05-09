@@ -76,7 +76,7 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
             double rfm_value;
     
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
     
             PreparedStatement statement = connection.prepareStatement("INSERT INTO rfm (height, waist, sex, username, rfm_value) VALUES (?, ?, ?, ?, ?)");
     
@@ -115,7 +115,7 @@ public class RelativeFatMassCalculator extends JFrame implements ActionListener 
     public static String getRFM() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javapproject", "root", "12345");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root", "12345");
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM rfm WHERE username=? ORDER BY datetime DESC");
     
             statement.setString(1, username);
