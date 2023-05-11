@@ -2,8 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
+import admin.admin;
 
 public class LoginRegistrationSystem extends JFrame implements ActionListener {
+    // private static final Object currentUser = null;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -104,13 +106,53 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
 
-    
-        }  else if (e.getSource() == adminButton) {
-            // Add your admin button logic here
-            JOptionPane.showMessageDialog(this, "You clicked the Admin button!");
         }
-         
+
+    
+        else if (e.getSource() == adminButton) {
+            // Prompt the user to enter their username and password
+            String username = JOptionPane.showInputDialog(this, "Enter your username:");
+            String password = JOptionPane.showInputDialog(this, "Enter your password:");
         
+            try {
+                System.out.println("Trying to connect to database...");
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaproject", "root",
+                        "12345");
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT * FROM Admin WHERE BINARY username=? AND BINARY password=?"); 
+                                
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, password);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    String dbUsername = resultSet.getString("username");
+                    String dbPassword = resultSet.getString("password");
+                    if (dbUsername.equals(username) && dbPassword.equals(password)) {
+                        JOptionPane.showMessageDialog(this, "Login successful!");
+                        admin obj = new admin(username);
+                        obj.setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Invalid user!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid username or password!");
+                }
+                connection.close();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        }
+        
+            
+            
+        
+           
         
         
         else if (e.getSource() == registerButton) {
@@ -142,7 +184,8 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         }
-    }
+    } 
+    
 
     public static void main(String[] args) {
         new LoginRegistrationSystem();
