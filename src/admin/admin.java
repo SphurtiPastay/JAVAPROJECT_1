@@ -3,6 +3,9 @@ package admin;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -45,6 +48,8 @@ public class admin extends JFrame implements ActionListener {
         // Create a menu bar with options for each table
         JMenuBar menuBar = new JMenuBar();
         JMenu bmiMenu = new JMenu("BMI");
+        
+        // Add "Select All" menu item
         JMenuItem bmiSelectAll = new JMenuItem("Select All");
         bmiSelectAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -61,22 +66,22 @@ public class admin extends JFrame implements ActionListener {
                     ex.printStackTrace();
                 }
             }
-
+        
             private TableModel buildTableModel(ResultSet rs) throws SQLException {
                 ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
-            
+        
                 // Get number of columns
                 int columnCount = metaData.getColumnCount();
-            
+        
                 // Create vector to hold column names and data
                 Vector<String> columnNames = new Vector<>();
                 Vector<Vector<Object>> data = new Vector<>();
-            
+        
                 // Add column names to vector
                 for (int i = 1; i <= columnCount; i++) {
                     columnNames.add(metaData.getColumnName(i));
                 }
-            
+        
                 // Add data rows to vector
                 while (rs.next()) {
                     Vector<Object> row = new Vector<>();
@@ -85,15 +90,61 @@ public class admin extends JFrame implements ActionListener {
                     }
                     data.add(row);
                 }
-            
+        
                 // Create DefaultTableModel object with data and column names
                 return new DefaultTableModel(data, columnNames);
             }
-            
+        
         });
         bmiMenu.add(bmiSelectAll);
-        menuBar.add(bmiMenu); 
-
+        
+        // Add "Save" menu item
+        JMenuItem bmiSave = new JMenuItem("Save");
+        bmiSave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PreparedStatement stmt = connection.prepareStatement("SELECT * FROM bmi");
+                    ResultSet rs = stmt.executeQuery();
+        
+                    // Create a file chooser dialog to get the file path from the user
+                    JFileChooser fileChooser = new JFileChooser();
+                    int userSelection = fileChooser.showSaveDialog(null);
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File fileToSave = fileChooser.getSelectedFile();
+        
+                        // Write the query results to the file
+                        FileWriter writer = new FileWriter(fileToSave);
+                        ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
+                        int columnCount = metaData.getColumnCount();
+        
+                        // Write column names to file
+                        for (int i = 1; i <= columnCount; i++) {
+                            writer.write(metaData.getColumnName(i) + ",");
+                        }
+                        writer.write("\n");
+        
+                        // Write data rows to file
+                        while (rs.next()) {
+                            for (int i = 1; i <= columnCount; i++) {
+                                Object value = rs.getObject(i);
+                                writer.write(value.toString() + ",");
+                            }
+                            writer.write("\n");
+                        }
+        
+                        writer.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        bmiMenu.add(bmiSave);
+        
+        menuBar.add(bmiMenu);
+        
 
         // JMenuBar menuBar = new JMenuBar();
         JMenu bsaMenu = new JMenu("Body Surface Area");
