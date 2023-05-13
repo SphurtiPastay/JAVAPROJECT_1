@@ -1,4 +1,4 @@
-package admin;
+package Admin;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -25,14 +25,14 @@ import javax.swing.table.TableModel;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
-public class admin extends JFrame implements ActionListener {
+public class Admin extends JFrame implements ActionListener {
 
    
     private static final long serialVersionUID = 1L;
     private Connection connection;
     private String currentUser;
 
-    public admin(String currentUser) {
+    public Admin(String currentUser) {
         try {
             // Create a connection to the database
             System.out.println("Trying to connect to database...");
@@ -368,7 +368,7 @@ public class admin extends JFrame implements ActionListener {
     }  
 
     
-    public admin() {
+    public Admin() {
     }
 
 
@@ -398,7 +398,7 @@ public class admin extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
          String currentUser = "sphurti"; // Replace with actual username
-        new admin(currentUser);
+        new Admin(currentUser);
 
     }
 

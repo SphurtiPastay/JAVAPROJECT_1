@@ -2,7 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
-import admin.admin;
+
+import Admin.Admin;
 
 public class LoginRegistrationSystem extends JFrame implements ActionListener {
     // private static final Object currentUser = null;
@@ -130,7 +131,7 @@ public class LoginRegistrationSystem extends JFrame implements ActionListener {
                     String dbPassword = resultSet.getString("password");
                     if (dbUsername.equals(username) && dbPassword.equals(password)) {
                         JOptionPane.showMessageDialog(this, "Login successful!");
-                        admin obj = new admin(username);
+                        Admin obj = new Admin(username);
                         obj.setVisible(true);
                         dispose();
                     } else {
