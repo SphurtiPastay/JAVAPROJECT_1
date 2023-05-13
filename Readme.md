@@ -69,21 +69,3 @@ Working of an User
 
 Conclusion
 These measurements can be useful for assessing general health and fitness, it is important to remember that they have limitations and do not provide a complete picture of an individual's health. It is always best to consult with a healthcare professional for a more accurate assessment of one's health and fitness levels.  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
